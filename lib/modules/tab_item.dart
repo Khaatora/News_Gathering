@@ -14,7 +14,7 @@ class TabItem extends StatelessWidget {
           vertical: MediaQuery.of(context).size.height * 0.01,
           horizontal: MediaQuery.of(context).size.width * 0.015),
       decoration: BoxDecoration(
-        color: isSelected ? Colors.green : Colors.transparent,
+        color: isSelected ? Colors.green : Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.green),
       ),

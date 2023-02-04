@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:news_own/models/SourcesResponse.dart';
-import 'package:news_own/modules/tab_controller.dart';
-import 'package:news_own/shared/network/remote/api_manager.dart';
+import 'package:news_own/layout/Search/news_search.dart';
+import 'package:news_own/models/category_data.dart';
+import 'package:news_own/modules/category_screen.dart';
+import 'package:news_own/modules/drawer_screen.dart';
+import 'package:news_own/modules/home_screen.dart';
 
-class HomeLayout extends StatelessWidget {
+class HomeLayout extends StatefulWidget {
   static const routeName = "Home_Screen";
 
+  @override
+  State<HomeLayout> createState() => _HomeLayoutState();
+}
+
+class _HomeLayoutState extends State<HomeLayout> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -24,28 +31,33 @@ class HomeLayout extends StatelessWidget {
             borderRadius: BorderRadius.only(bottomLeft: Radius.circular(25),bottomRight: Radius.circular(25))
         ),
           title: const Text("News"),
+          actions: [IconButton(onPressed: () {
+            showSearch(context: context, delegate: NewsSearch());
+          }, icon: const Icon(Icons.search, size: 32,))],
         ),
-        body: FutureBuilder<SourcesResponse>(
-          future: ApiManager.getSources(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (snapshot.hasError) {
-              return Center(
-                child: Text(snapshot.data?.message ?? ""),
-              );
-            }
-            if (snapshot.data?.status != 'ok') {
-              Center(
-                child: Text("${snapshot.data?.message}"),
-              );
-            }
-            var sources = snapshot.data?.sources ?? [];
-            return TabControllerScreen(sources);
-          },
-        ),
+        drawer: DrawerScreen(onDrawerSelected),
+        body:  categoryData == null? CategoryScreen(onCategorySelected):HomeScreen(categoryData!),
       ),
     );
+  }
+
+  CategoryData? categoryData= null;
+
+  void onCategorySelected(categorySelected){
+    categoryData = categorySelected;
+    setState(() {
+
+    });
+  }
+
+  void onDrawerSelected(number){
+    if(number == DrawerScreen.CATEGORIES){
+      categoryData = null;
+    }else if(number == DrawerScreen.SETTINGS){
+      // open settings screen
+    }
+    setState(() {
+      Navigator.pop(context);
+    });
   }
 }

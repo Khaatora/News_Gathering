@@ -77,7 +77,7 @@ class SourcesResponse {
     map['code'] = code;
     map['message'] = message;
     if (sources != null) {
-      map['sources'] = sources?.map((v) => v.toJson()).toList();
+      map['sources'] = sources?.map((source) => source.toJson()).toList();
     }
     return map;
   }

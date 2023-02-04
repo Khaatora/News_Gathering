@@ -3,6 +3,8 @@ import 'package:news_own/models/SourcesResponse.dart';
 import 'package:news_own/modules/tab_item.dart';
 import 'package:news_own/shared/network/remote/api_manager.dart';
 
+import 'NewsCard.dart';
+
 class TabControllerScreen extends StatefulWidget {
   List<Sources> sources;
 
@@ -39,7 +41,7 @@ class _TabControllerScreenState extends State<TabControllerScreen> {
         ),
         FutureBuilder(
           future:
-              ApiManager.getNewsData(widget.sources[selectedIndex].id ?? ""),
+              ApiManager.getNewsData(sourceId: widget.sources[selectedIndex].id ?? ""),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
@@ -51,7 +53,7 @@ class _TabControllerScreenState extends State<TabControllerScreen> {
             if (snapshot.hasError) {
               Column(
                 children: [
-                  Text(snapshot.data?.message ?? "There is an error"),
+                    Text(snapshot.data?.message ?? "There is an error"),
                   TextButton(
                     onPressed: () {},
                     child: const Text("Try Again"),
@@ -75,7 +77,7 @@ class _TabControllerScreenState extends State<TabControllerScreen> {
             return Expanded(
               child: ListView.builder(
                   itemCount: news.length,
-                  itemBuilder: (context, index) => Text(news[index].title ?? "")),
+                  itemBuilder: (context, index) => NewsCard(news[index])),
             );
           },
         )

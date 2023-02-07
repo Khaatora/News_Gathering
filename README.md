@@ -1,3 +1,3 @@
 # news_own
 
-news application
+news application for learning purposes
